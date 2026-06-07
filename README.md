@@ -54,7 +54,7 @@ terraform apply -auto-approve
 ### 3️⃣ Verification
 Upon successful deployment, Terraform will output the DNS name of the Application Load Balancer. Navigate to this URL in your browser:
 ```bash
-http://<alb_dns_name>:80
+http://<alb_dns_name>
 ```
 *Expected Result:*
 
