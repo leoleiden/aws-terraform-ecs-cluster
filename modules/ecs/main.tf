@@ -1,0 +1,110 @@
+# ECS MAIN
+resource "aws_ecs_cluster" "main" {
+  name = var.ecs_cluster_id
+}
+
+resource "aws_security_group" "ecs_sg" {
+  name        = "ecs-sg"
+  description = "Allow traffic for ECS"
+  vpc_id      = var.vpc_id
+
+  ingress {
+    from_port       = 80
+    to_port         = 80
+    protocol        = "tcp"
+    security_groups = [var.alb_sg_id]
+  }
+
+  ingress {
+    from_port        = 443
+    to_port          = 443
+    protocol         = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  ingress {
+    from_port        = 2049
+    to_port          = 2049
+    protocol         = "tcp"
+    security_groups  = [var.efs_sg_id]
+  }
+
+  egress {
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+}
+
+resource "aws_ecs_task_definition" "nginx_task" {
+  family                   = "nginx-task"
+  requires_compatibilities  = ["FARGATE"]
+  network_mode             = "awsvpc"
+  cpu                      = "1024"
+  memory                   = "2048"
+
+  container_definitions = jsonencode([{
+    name      = "nginx-container"
+    image     = "nginx:1.21.6"
+    essential = true
+
+    mountPoints = [
+        {
+          sourceVolume  = "nginx-config"
+          containerPath = "/mnt/efs/config"
+          readOnly      = false
+        },
+        {
+          sourceVolume  = "nginx-html"
+          containerPath = "/mnt/efs/html"
+          readOnly      = false
+        }
+      ]
+
+    portMappings = [ {
+      containerPort = 80
+      hostPort      = 80
+      protocol      = "tcp"
+    }]
+  }])
+
+  volume {
+    name = "nginx-config"
+    efs_volume_configuration {
+      file_system_id     = var.efs_id
+      transit_encryption = "ENABLED"
+      root_directory     = "/"
+    }
+  }
+
+  volume {
+    name = "nginx-html"
+    efs_volume_configuration {
+      file_system_id     = var.efs_id
+      transit_encryption = "ENABLED"
+      root_directory     = "/"
+    }
+  }
+}
+
+resource "aws_ecs_service" "nginx_service" {
+  name            = "nginx-service"
+  cluster         = aws_ecs_cluster.main.id
+  task_definition = aws_ecs_task_definition.nginx_task.arn
+  desired_count   = 1
+  launch_type     = "FARGATE"
+
+  load_balancer {
+    target_group_arn = var.alb_target_group_arn
+    container_name   = "nginx-container"
+    container_port   = 80
+  }
+
+  network_configuration {
+    subnets          = var.subnet_ids
+    security_groups = [aws_security_group.ecs_sg.id]
+    assign_public_ip = true
+  }
+}

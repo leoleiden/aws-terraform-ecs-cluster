@@ -1,0 +1,11 @@
+# This is an example configuration file.
+# Replace the placeholder values with your actual AWS infrastructure IDs.
+# DO NOT commit your real terraform.tfvars file containing actual sensitive data!
+
+vpc_id            = "vpc-xxxxxxxxxxxxxxxxx"
+subnet_ids        = ["subnet-xxxxxxxxxxxxxxxxx", "subnet-yyyyyyyyyyyyyyyyy"]
+subnet_id         = "subnet-xxxxxxxxxxxxxxxxx"
+security_group_id = "sg-xxxxxxxxxxxxxxxxx"
+ecs_cluster_id    = "example-ecs-cluster"
+efs_id            = "fs-xxxxxxxxxxxxxxxxx"
+ecs_service_name  = "example-nginx-service"
