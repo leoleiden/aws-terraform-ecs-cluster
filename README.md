@@ -1,4 +1,10 @@
 # ☁️ Scalable AWS ECS Cluster via Terraform
+
+![AWS](https://img.shields.io/badge/AWS-ECS_Fargate-FF9900?style=for-the-badge&logo=amazonaws&logoColor=white)
+![Terraform](https://img.shields.io/badge/Terraform-IaC-7B42BC?style=for-the-badge&logo=terraform&logoColor=white)
+![Docker](https://img.shields.io/badge/Docker-Containers-2496ED?style=for-the-badge&logo=docker&logoColor=white)
+![Nginx](https://img.shields.io/badge/Nginx-Load_Balancing-009639?style=for-the-badge&logo=nginx&logoColor=white)
+
 **Architected and provisioned by Leonid Lachmann**
 
 This repository contains an Infrastructure as Code (IaC) solution using Terraform to provision a highly available, containerized web application infrastructure on Amazon Web Services (AWS), **designed for fault tolerance and strict network isolation in high-load environments.**
