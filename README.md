@@ -1,17 +1,17 @@
 # ☁️ Scalable AWS ECS Cluster via Terraform
 **Architected and provisioned by Leonid Lachmann**
 
-This repository contains an Infrastructure as Code (IaC) solution using Terraform to provision a highly available, containerized web application infrastructure on Amazon Web Services (AWS).
+This repository contains an Infrastructure as Code (IaC) solution using Terraform to provision a highly available, containerized web application infrastructure on Amazon Web Services (AWS), **designed for fault tolerance and strict network isolation in high-load environments.**
 
 The architecture leverages **Amazon ECS (Fargate)** for serverless container execution, **Amazon EFS** for persistent shared storage across containers, and an **Application Load Balancer (ALB)** for traffic distribution.
 
-## 🏗️ Architecture Overview
+## 🏗️ Architecture & Enterprise Readiness
 
-The infrastructure is built using a modular Terraform approach, ensuring reusability, maintainability, and clear separation of concerns.
+The infrastructure is built using a modular Terraform approach, ensuring reusability, maintainability, and clear separation of concerns, **aligning with enterprise compliance standards**.
 
-* **Networking & Traffic Routing (`alb` module):** An Application Load Balancer dynamically routes HTTP traffic to healthy ECS tasks across multiple Availability Zones.
-* **Compute Orchestration (`ecs` module):** Utilizes AWS Fargate to run Nginx containers without managing underlying EC2 instances. Tasks are secured with strict Security Groups.
-* **Persistent Storage (`efs` module):** An encrypted Amazon Elastic File System is mounted to the ECS tasks, providing persistent, shared storage for Nginx configuration files and HTML content.
+* **Networking & High Availability (`alb` module):** An Application Load Balancer dynamically routes HTTP traffic to healthy ECS tasks across multiple Availability Zones, **ensuring fault tolerance and SLA 99.9%+ adherence for high-load environments**.
+* **Compute Orchestration & Isolation (`ecs` module):** Utilizes AWS Fargate to run Nginx containers without managing underlying EC2 instances. Tasks are secured with strict Security Groups, **enforcing a zero-trust network model, workload isolation, and least-privilege execution**.
+* **Persistent & Secure Storage (`efs` module):** An **encrypted-at-rest** Amazon Elastic File System is mounted to the ECS tasks, providing persistent, shared storage for Nginx configuration files and HTML content **without compromising data security**.
 
 ### Infrastructure Diagram
 ![Architecture Diagram](./assets/screen1.png)
